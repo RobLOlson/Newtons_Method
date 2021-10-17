@@ -1,5 +1,5 @@
-let C_W = 400;
-let C_H = 400;
+let C_W = 300;
+let C_H = 300;
 
 let PIXEL_SIZE = 10;
 let ZEROS_COUNT = 3;
@@ -19,6 +19,12 @@ let DEPTH = 0;
 let CACHE_INDEX = 0;
 
 let ID = 0;
+let button1;
+let button2;
+let button3;
+let button_in;
+let button_out;
+let slider;
 
 class Point{
     constructor(x=random(-C_W/2,C_W/2), y=random(-C_H/2,C_H/2), my_color="white") {
@@ -29,9 +35,8 @@ class Point{
         this.my_color = my_color;
         this.size = PIXEL_SIZE;
         this.z_cache = [this.z];
-        // this.cache = [this.position.copy()];
-        this.ID = ID;
-        ID += 1;
+        // this.ID = ID;
+        // ID += 1;
     }
 
 
@@ -122,11 +127,45 @@ function setup() {
     strokeWeight(3);
     textSize(13);
 
+    let div = createDiv(`
+        Use mouse to move control points (these represent zeroes for the complex polynomial).<br>
+      Iterate through Newton's method with keys 'f' (forward) and 'b' (backward).<br>
+      Zoom in and out with mouse wheel.<br>
+      Press number keys to change the number of control points.<br>
+      Inspired by <a href="https://www.youtube.com/watch?v=-RdOwhmqP5s">Grant Sanderson's video on Newton Fractals.</a>`);
+    div.style('font-size', '16px');
+    div.position(5, C_H+100);
+
+    // select('canvas').position(10, 30);
+
+    button1 = createButton('forward');
+    button1.position(0, C_H+20);
+    button1.mousePressed(forward);
+
+    button2 = createButton('backward');
+    button2.position(150, C_H+20);
+    button2.mousePressed(backward);
+
+    button3 = createButton('refresh');
+    button3.position(300, C_H+50);
+    button3.mousePressed(update_zeroes);
+
+    button_in = createButton('zoom in');
+    button_in.position(0, C_H+50);
+    button_in.mousePressed(zoom_in);
+
+    button_out = createButton('zoom out');
+    button_out.position(150, C_H+50);
+    button_out.mousePressed(zoom_out);
+
+
+    slider = createSlider(1, 12, ZEROS_COUNT);
+    slider.position(300, C_H+20);
+    slider.style('width', '80px');
+
     targets = []
     DEPTH = 0;
     CACHE_INDEX = 0;
-
-    console.log(ZEROS_COUNT);
 
     for(let i=0; i < ZEROS_COUNT; i++){
         targets.push(new Point());
@@ -146,6 +185,8 @@ function draw() {
   applyMatrix(1,0,0,-1,0,0);
   m_x = mouseX-C_W/2;
   m_y = -1*mouseY+C_H/2
+
+  ZEROS_COUNT = slider.value();
 
   background(0);
 
@@ -215,28 +256,50 @@ function keyPressed() {
         setup();
     }
     if(keyCode == 66){
-        if(CACHE_INDEX > 0){
-            CACHE_INDEX -= 1;
-        }
+        backward();
     }
 
     //Pressed 'f'
     if(keyCode == 70){
-        // if(DEPTH == samples[0][0].cache.length-1){
-        if(DEPTH == CACHE_INDEX){
-
-            for(let i=0; i < samples.length; i++){
-              for(let j=0; j < samples[i].length; j++){
-                        // samples[i][j].position = samples[i][j].cache[CACHE_INDEX];
-                    samples[i][j].next_position();
-                }
-            }
-            DEPTH += 1;
-
-            // setup_samples();
-        }
-        CACHE_INDEX += 1;
+        forward();
     }
+}
+
+function update_zeroes(){
+    ZEROS_COUNT = slider.value();
+    setup();
+}
+
+function forward() {
+    if(DEPTH == CACHE_INDEX){
+
+        for(let i=0; i < samples.length; i++){
+          for(let j=0; j < samples[i].length; j++){
+                    // samples[i][j].position = samples[i][j].cache[CACHE_INDEX];
+                samples[i][j].next_position();
+            }
+        }
+        DEPTH += 1;
+
+        // setup_samples();
+    }
+    CACHE_INDEX += 1;
+}
+
+function backward() {
+    if(CACHE_INDEX > 0){
+        CACHE_INDEX -= 1;
+    }
+}
+
+function zoom_in() {
+    PIXEL_SIZE -= 1;
+    setup_samples();
+}
+
+function zoom_out(){
+    PIXEL_SIZE += 1;
+    setup_samples();
 }
 
 function mouseWheel(event) {
@@ -272,4 +335,16 @@ function position_to_complex(pos){
 
 function complex_to_position(z) {
     return createVector(z.re * C_W / X_AXIS, z.im * C_H / Y_AXIS);
+}
+
+// let button;
+// function setup() {
+//   createCanvas(100, 100);
+//   background(0);
+//
+// }
+
+function changeBG() {
+  let val = random(255);
+  background(val);
 }
