@@ -133,8 +133,8 @@ function setup() {
       Zoom in and out with mouse wheel.<br>
       Press number keys to change the number of control points.<br>
       Inspired by <a href="https://www.youtube.com/watch?v=-RdOwhmqP5s">Grant Sanderson's video on Newton Fractals.</a>`);
-    div.style('font-size', '16px');
-    div.position(5, C_H+100);
+    div.style('font-size', '12px');
+    div.position(5, C_H+70);
 
     // select('canvas').position(10, 30);
 
