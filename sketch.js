@@ -293,12 +293,12 @@ function backward() {
 }
 
 function zoom_in() {
-    PIXEL_SIZE -= 1;
+    PIXEL_SIZE += 1;
     setup_samples();
 }
 
 function zoom_out(){
-    PIXEL_SIZE += 1;
+    PIXEL_SIZE -= 1;
     setup_samples();
 }
 
