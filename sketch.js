@@ -143,11 +143,11 @@ function setup() {
     button1.mousePressed(forward);
 
     button2 = createButton('backward');
-    button2.position(150, C_H+20);
+    button2.position(100, C_H+20);
     button2.mousePressed(backward);
 
     button3 = createButton('refresh');
-    button3.position(300, C_H+50);
+    button3.position(200, C_H+50);
     button3.mousePressed(update_zeroes);
 
     button_in = createButton('zoom in');
@@ -155,12 +155,12 @@ function setup() {
     button_in.mousePressed(zoom_in);
 
     button_out = createButton('zoom out');
-    button_out.position(150, C_H+50);
+    button_out.position(100, C_H+50);
     button_out.mousePressed(zoom_out);
 
 
     slider = createSlider(1, 12, ZEROS_COUNT);
-    slider.position(300, C_H+20);
+    slider.position(200, C_H+20);
     slider.style('width', '80px');
 
     targets = []
